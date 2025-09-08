@@ -1,5 +1,5 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from app.constants import *
+from app.bot.constants import *
 
 machines = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text=MACHINE_1_RU)],
                                          [KeyboardButton(text=MACHINE_2_RU)]],

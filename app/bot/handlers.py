@@ -4,9 +4,9 @@ from aiogram.types import Message
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
-from app.constants import *
+from app.bot.constants import *
 
-import app.keyboard as kb
+import app.bot.keyboard as kb
 
 router = Router()
 
