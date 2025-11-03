@@ -1,4 +1,3 @@
-import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,11 +10,14 @@ class Settings(BaseSettings):
     BOT_TOKEN: str
 
     class Config:
-        env_file = "C:/Users/rikkiter/PycharmProjects/nntuwashingmachine/.env"
+        env_file = "C:/Users/rika5/PycharmProjects/nntuWashingMachine/.env"
 
     def get_db_url(self):
         return (f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@"
                 f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
 
-# load_dotenv("C:/Users/rikkiter/PycharmProjects/nntuwashingmachine/.env")
+    def get_sqlite_url(self):
+        return "sqlite+aiosqlite:///db.sqlite3"
+
+
 settings = Settings()
