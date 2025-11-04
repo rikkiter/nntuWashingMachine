@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 from app.database.database import async_session
 from app.database.database import WashingMachine
@@ -6,10 +6,13 @@ from sqlalchemy import select, update
 
 
 def get_time():
-    return datetime.now().strftime("%Y-%m-%d %H:%M")
+    offset = timedelta(hours=3)
+    msk_tz = timezone(offset, name='MSK')
+    return datetime.now(tz=msk_tz).strftime("%Y-%m-%d %H:%M")
+
 
 async def add_machine(dorm_number, machine_number):
-    machine = get_machine(dorm_number, machine_number)
+    machine = await get_machine(dorm_number, machine_number)
     if not machine:
         async with async_session() as session:
             session.add(WashingMachine
@@ -30,6 +33,7 @@ async def get_machine(dorm_number, machine_number):
                                        .where(WashingMachine.number == machine_number)
                                        .where(WashingMachine.dorm_number == dorm_number))
         return machine
+
 
 async def update_machine(dorm_number, machine_number, status):
     async with (async_session() as session):

@@ -1,13 +1,31 @@
-FROM python:3.13-slim as builder
+FROM python:3.13-slim
 
-ENV POETRY_VERSION=2.1.3
-RUN pip install --no-cache-dir "poetry==$POETRY_VERSION"
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app
 
-COPY pyproject.toml poetry.lock ./
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
 
+WORKDIR /app
+
+# Copy dependency files
+COPY poetry.lock pyproject.toml ./
+
+# Install all dependencies (including dev)
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi
+
+# Copy project
 COPY . .
 
+# For development with auto-reload
 CMD ["python", "app/main.py"]
