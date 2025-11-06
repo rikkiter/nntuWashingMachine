@@ -55,4 +55,4 @@ async def exit_to_start(message: Message, state: FSMContext) -> None:
 
 @router.message(Command("about"))
 async def about(message: Message) -> None:
-    await message.answer("text")
+    await message.answer(ABOUT_RU)
